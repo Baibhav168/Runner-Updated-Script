@@ -104,8 +104,10 @@ which jq || fatal "jq required.  Please install in PATH with apt-get, brew, etc"
 
 # bail early if there's already a runner there. also sudo early
 if [ -d ./runner ]; then
-    rm -rf ./runner
-    # fatal "Runner already exists.  Use a different directory or delete ./runner"
+    if [ -z "$(ls ./runner)" ]; then
+        rm -rf ./runner
+    else
+        fatal "Runner already exists.  Use a different directory or delete ./runner"
 fi
 
 sudo -u ${svc_user} mkdir runner
