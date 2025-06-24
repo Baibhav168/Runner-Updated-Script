@@ -104,7 +104,8 @@ which jq || fatal "jq required.  Please install in PATH with apt-get, brew, etc"
 
 # bail early if there's already a runner there. also sudo early
 if [ -d ./runner ]; then
-    fatal "Runner already exists.  Use a different directory or delete ./runner"
+    rm -rf ./runner
+    # fatal "Runner already exists.  Use a different directory or delete ./runner"
 fi
 
 sudo -u ${svc_user} mkdir runner
@@ -130,7 +131,11 @@ if [[ "$runner_scope" == *\/* ]]; then
 fi
 
 # export RUNNER_TOKEN=$(curl -s -X POST ${base_api_url}/${orgs_or_repos}/${runner_scope}/actions/runners/registration-token -H "accept: application/vnd.github.everest-preview+json" -H "authorization: token ${RUNNER_CFG_PAT}" | jq -r '.token')
-export RUNNER_TOKEN=$(curl -L -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${RUNNER_CFG_PAT}" -H "X-GitHub-Api-Version: 2022-11-28"  https://${base_api_url}/${orgs_or_repos}/${runner_scope}/actions/runners/registration-token | jq -r '.token')
+export RUNNER_TOKEN=$(curl -L -X POST ${base_api_url}/${orgs_or_repos}/${runner_scope}/actions/runners/registration-token \
+ -H "Accept: application/vnd.github+json" \
+ -H "Authorization: Bearer ${RUNNER_CFG_PAT}" \
+ -H "X-GitHub-Api-Version: 2022-11-28" \ 
+ | jq -r '.token')
 
 if [ "null" == "$RUNNER_TOKEN" -o -z "$RUNNER_TOKEN" ]; then fatal "Failed to get a token"; fi
 
