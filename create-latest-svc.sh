@@ -134,8 +134,7 @@ fi
 export RUNNER_TOKEN=$(curl -L -X POST ${base_api_url}/${orgs_or_repos}/${runner_scope}/actions/runners/registration-token \
  -H "Accept: application/vnd.github+json" \
  -H "Authorization: Bearer ${RUNNER_CFG_PAT}" \
- -H "X-GitHub-Api-Version: 2022-11-28" \ 
- | jq -r '.token')
+ -H "X-GitHub-Api-Version: 2022-11-28" | jq -r '.token')
 
 if [ "null" == "$RUNNER_TOKEN" -o -z "$RUNNER_TOKEN" ]; then fatal "Failed to get a token"; fi
 
