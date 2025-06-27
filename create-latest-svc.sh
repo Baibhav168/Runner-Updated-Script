@@ -108,6 +108,7 @@ if [ -d ./runner ]; then
         rm -rf ./runner
     else
         fatal "Runner already exists.  Use a different directory or delete ./runner"
+    fi
 fi
 
 sudo -u ${svc_user} mkdir runner
